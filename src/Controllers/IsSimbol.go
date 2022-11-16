@@ -55,7 +55,7 @@ func _IsSymbol(value string) bool {
 	case "{":
 		return true
 	case "}":
-		return false
+		return true
 	default:
 		return false
 	}
