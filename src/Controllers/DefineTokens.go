@@ -12,7 +12,15 @@ type Token struct {
 
 func DefineToken(iterator int32, token string, lineNumber int32) []Token {
 
-	if strings.Contains(token, "{") || strings.Contains(token, "}") || strings.Contains(token, "(") || strings.Contains(token, ")") || strings.Contains(token, "=") || strings.Contains(token, ">") || strings.Contains(token, ".") || strings.Contains(token, "/") || strings.Contains(token, `"`) || strings.Contains(token, ",") || strings.Contains(token, "`") && len(token) > 1 {
+	if strings.Contains(token, "{") || strings.Contains(token, "}") || strings.Contains(token, "(") ||
+		strings.Contains(token, ")") || strings.Contains(token, "=") || strings.Contains(token, "<") ||
+		strings.Contains(token, ">") || strings.Contains(token, ".") || strings.Contains(token, "/") ||
+		strings.Contains(token, `"`) || strings.Contains(token, ",") || strings.Contains(token, "`") ||
+		strings.Contains(token, "[") || strings.Contains(token, "]") || strings.Contains(token, "+") ||
+		strings.Contains(token, "-") || strings.Contains(token, "*") || strings.Contains(token, "%") ||
+		strings.Contains(token, "^") || strings.Contains(token, "!") || strings.Contains(token, "#") ||
+		strings.Contains(token, "~") || strings.Contains(token, "&") || strings.Contains(token, ":") &&
+		len(token) > 1 {
 
 		Tokens := []Token{}
 
@@ -36,6 +44,14 @@ func Define(token string, lineNumber int32) Token {
 	if _IsSymbol(token) {
 		return Token{
 			Type:  "Punctuator",
+			Value: token,
+			Line:  lineNumber,
+		}
+	}
+
+	if _IsKeyword(token) {
+		return Token{
+			Type:  "Keyword",
 			Value: token,
 			Line:  lineNumber,
 		}
