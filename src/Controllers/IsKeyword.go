@@ -98,6 +98,8 @@ func _IsKeyword(value string) bool {
 		return true
 	case "catch":
 		return true
+	case "constructor":
+		return true
 	default:
 		return false
 	}
