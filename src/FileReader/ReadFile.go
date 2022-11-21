@@ -2,7 +2,7 @@ package filereader
 
 type ReadedFile map[int8]map[int32]string
 
-func ReadFile(Files_Path []string) ReadedFile {
+func ReadFile(Files_Path []string) (ReadedFile, []string) {
 
 	var Readed ReadedFile = make(ReadedFile)
 
@@ -13,5 +13,5 @@ func ReadFile(Files_Path []string) ReadedFile {
 
 	}
 
-	return Readed
+	return Readed, Files_Path
 }
