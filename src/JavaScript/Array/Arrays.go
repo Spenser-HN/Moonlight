@@ -7,8 +7,8 @@ import (
 
 	//JavaScript
 
-	"moonlight.js/moonlight/src/utils/JavaScript/Number"
-	"moonlight.js/moonlight/src/utils/JavaScript/Object"
+	"com.moonlight/app/src/JavaScript/Number"
+	"com.moonlight/app/src/JavaScript/Object"
 )
 
 //Globals

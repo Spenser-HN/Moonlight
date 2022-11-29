@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"reflect"
 
-	"moonlight.js/moonlight/src/utils/JavaScript/Array"
-	"moonlight.js/moonlight/src/utils/JavaScript/Number"
-	"moonlight.js/moonlight/src/utils/JavaScript/Object"
+	"com.moonlight/app/src/JavaScript/Array"
+	"com.moonlight/app/src/JavaScript/Number"
+	"com.moonlight/app/src/JavaScript/Object"
 )
 
 //All types in this file come from "./Types.go" &

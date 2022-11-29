@@ -6,9 +6,9 @@ import (
 	"os"
 	"reflect"
 
-	"moonlight.js/moonlight/src/utils/JavaScript"
-	"moonlight.js/moonlight/src/utils/JavaScript/Number"
-	"moonlight.js/moonlight/src/utils/JavaScript/Object"
+	"com.moonlight/app/src/JavaScript"
+	"com.moonlight/app/src/JavaScript/Number"
+	"com.moonlight/app/src/JavaScript/Object"
 )
 
 // ? ----- Dont delete this flags because they are needed -----
@@ -25,7 +25,7 @@ func HandleFunction() string {
 	return ("\x1b[36m[Function]\x1b[0m")
 }
 
-func HandleObject(Obj Object.New, ConsoleMessage string) (string, string) {
+func HandleObject(Obj Object.New) string {
 
 	var object string = "Object: { "
 
@@ -73,8 +73,7 @@ func HandleObject(Obj Object.New, ConsoleMessage string) (string, string) {
 			object += space + (key + " : " + value) + ",\n"
 
 		} else if reflect.ValueOf(entrie[1]).Kind().String() == "ptr" {
-			ConsoleMessage = "This log contains pointers"
-			value = "\x1b[32m[Pointer]\x1b[0m"
+			value = HandlePointer()
 			object += space + (key + " : " + value) + ",\n"
 		} else if JavaScript.TypeOf(entrie[1]) == "map" {
 			value = "\x1b[36m[Map]\x1b[0m"
@@ -91,26 +90,26 @@ func HandleObject(Obj Object.New, ConsoleMessage string) (string, string) {
 
 	object += "},\n"
 
-	return ConsoleMessage, object
+	return object
 
 }
 
+func HandlePointer() string {
+	return "\x1b[32m[Pointer]\x1b[0m"
+}
+
 func Log(args ...any) {
-	var PreMessage string
 	for i, arg := range args {
 
 		//Pointers
 		if reflect.ValueOf(arg).Kind().String() == "ptr" {
-			PreMessage = "This log contains pointers"
+			args[i] = HandlePointer()
 		}
 
 		//Objects
 		if obj, v := arg.(Object.New); v == true {
-			ConsoleMessage, Arg := HandleObject(obj, PreMessage)
+			Arg := HandleObject(obj)
 			args[i] = Arg
-			if len(ConsoleMessage) > 1 && len(PreMessage) == 0 {
-				PreMessage = ConsoleMessage
-			}
 		}
 
 		//Numbers
@@ -126,10 +125,6 @@ func Log(args ...any) {
 			args[i] = HandleFunction()
 		}
 
-	}
-
-	if len(PreMessage) > 1 {
-		fmt.Println("\x1b[31m [Alert] \x1b[0m ", PreMessage)
 	}
 
 	fmt.Println(args...)
@@ -137,21 +132,17 @@ func Log(args ...any) {
 
 func Error(args ...any) {
 	Error := log.New(os.Stdout, "\x1b[31m Error: \x1b[0m", flags)
-	var PreMessage string
 	for i, arg := range args {
 
 		//Pointers
 		if reflect.ValueOf(arg).Kind().String() == "ptr" {
-			PreMessage = "This log contains pointers"
+			args[i] = HandlePointer()
 		}
 
 		//Objects
 		if obj, v := arg.(Object.New); v == true {
-			ConsoleMessage, Arg := HandleObject(obj, PreMessage)
+			Arg := HandleObject(obj)
 			args[i] = Arg
-			if len(ConsoleMessage) > 1 && len(PreMessage) == 0 {
-				PreMessage = ConsoleMessage
-			}
 		}
 
 		//Numbers
@@ -167,21 +158,65 @@ func Error(args ...any) {
 
 	}
 
-	if len(PreMessage) > 1 {
-		fmt.Println("\x1b[31m [Alert] \x1b[0m ", PreMessage)
-	}
-
-	fmt.Println(args...)
-
 	Error.Println(args...)
 }
 
 func Warn(args ...any) {
 	Warn := log.New(os.Stdout, "\x1b[33m Warn: \x1b[0m", flags)
+	for i, arg := range args {
+
+		//Pointers
+		if reflect.ValueOf(arg).Kind().String() == "ptr" {
+			args[i] = HandlePointer()
+		}
+
+		//Objects
+		if obj, v := arg.(Object.New); v == true {
+			Arg := HandleObject(obj)
+			args[i] = Arg
+		}
+
+		//Numbers
+		if num, v := arg.(Number.New); v == true {
+			Num := HandleNumber(num)
+			args[i] = Num
+		}
+
+		//Functions
+		if JavaScript.TypeOf(arg) == "function" {
+			args[i] = HandleFunction()
+		}
+
+	}
 	Warn.Println(args...)
 }
 
 func Info(args ...any) {
 	Info := log.New(os.Stdout, "\x1b[32m Info: \x1b[0m", flags)
+	for i, arg := range args {
+
+		//Pointers
+		if reflect.ValueOf(arg).Kind().String() == "ptr" {
+			args[i] = HandlePointer()
+		}
+
+		//Objects
+		if obj, v := arg.(Object.New); v == true {
+			Arg := HandleObject(obj)
+			args[i] = Arg
+		}
+
+		//Numbers
+		if num, v := arg.(Number.New); v == true {
+			Num := HandleNumber(num)
+			args[i] = Num
+		}
+
+		//Functions
+		if JavaScript.TypeOf(arg) == "function" {
+			args[i] = HandleFunction()
+		}
+
+	}
 	Info.Println(args...)
 }
